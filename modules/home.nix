@@ -8,20 +8,24 @@
   # User packages
   home.packages = with pkgs; [
     zsh
-    oh-my-posh
     eza
   ];
 
   # Allow home-manager to manage itself
   programs.home-manager.enable = true;
 
+  # Oh My Posh configuration
+  programs.oh-my-posh = {
+    enable = true;
+    enableBashIntegration = true;
+    enableZshIntegration = true;
+    useTheme = "night-owl";
+  };
+
   # Bash configuration
   programs.bash = {
     enable = true;
     enableCompletion = true;
-    initExtra = ''
-      eval "$(oh-my-posh init bash --config $(oh-my-posh config list | grep night-owl | head -n 1))"
-    '';
   };
 
   # Zsh configuration
@@ -30,9 +34,6 @@
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    initExtra = ''
-      eval "$(oh-my-posh init zsh --config $(oh-my-posh config list | grep night-owl | head -n 1))"
-    '';
   };
 
   # fzf - fuzzy finder
