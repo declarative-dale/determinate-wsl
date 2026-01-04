@@ -1,80 +1,84 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
+# System-wide NixOS configuration
+# For user-specific configuration, see home.nix
 
-# NixOS-WSL specific options are documented on the NixOS-WSL repository:
-# https://github.com/nix-community/NixOS-WSL
+{ pkgs, username, ... }:
 
 {
-  config,
-  lib,
-  pkgs,
-  username,
-  ...
-}:
+  # WSL Configuration
+  wsl = {
+    enable = true;
+    defaultUser = username;
+  };
 
-{
-  imports = [
-    # NixOS-WSL module is now imported in flake.nix
-  ];
+  # Nixpkgs Configuration
+  nixpkgs.config.allowUnfree = true;
 
+  # System Packages
   environment.systemPackages = with pkgs; [
+    # Development tools
     claude-code
+    git
+    direnv
+
+    # Editors
     vim
     neovim
     micro
-    xclip
+
+    # Nix tools
     nil
     nixd
     nixfmt
+
+    # CLI utilities
     tmux
     bottom
     curl
-    direnv
-    pinentry-curses
-    gpg-tui
     wget
     rsync
     restic
     tree
+    wslu # WSL utilities including wslclip for clipboard integration
+
+    # Archive tools
     unrar
     p7zip
-    git
+
+    # Security
     openssl
+    pinentry-curses
+    gpg-tui
+
+    # System info
     microfetch
   ];
 
-  wsl.enable = true;
-  wsl.defaultUser = username;
+  # Programs Configuration
+  programs = {
+    # VSCode/VSCodium Remote-WSL support
+    nix-ld.dev.enable = true;
 
-  # Enable nix-ld for VSCode/VSCodium Remote-WSL
-  programs.nix-ld.dev.enable = true;
-  nix-ld-config.enable = true;
-  nix-ld-config.user = username;
+    # GPG agent with SSH support
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
+      pinentryPackage = pkgs.pinentry-curses;
+    };
 
-  nixpkgs.config.allowUnfree = true;
-
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-    pinentryPackage = pkgs.pinentry-curses;
+    # Zsh (required for user shell)
+    zsh.enable = true;
   };
 
-  # Enable zsh system-wide (required for setting it as default shell)
-  programs.zsh.enable = true;
+  # nix-ld configuration for VSCode/VSCodium
+  nix-ld-config = {
+    enable = true;
+    user = username;
+  };
 
-  # Set zsh as default shell for user
+  # User Configuration
   users.users.${username} = {
     isNormalUser = true;
     shell = pkgs.zsh;
     extraGroups = [ "wheel" ];
   };
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It's perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.05"; # Did you read the comment?
 }

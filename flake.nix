@@ -4,106 +4,60 @@
   # Flake inputs
   inputs = {
     nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0"; # Stable Nixpkgs (use 0.1 for unstable)
+
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+
     determinate = {
       url = "https://flakehub.com/f/DeterminateSystems/determinate/3"; # Determinate 3.*
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     nix-ld = {
       url = "github:Mic92/nix-ld";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  # Flake outputs
+  # Flake outputs using flake-parts
   outputs =
-    { self, ... }@inputs:
-    let
-      # Change this if you're building for a system type other than x86 AMD Linux
-      system = "x86_64-linux";
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      # Systems to support
+      systems = [ "x86_64-linux" ];
 
-      # The flake output name of your system (`nixosConfigurations.${key}`). Change this
-      # to make it less generic
-      name = "nixos-wsl";
+      # Import flake modules for organization
+      imports = [ ./parts/nixos.nix ];
 
-      # Default username - change this to match your preferred username
-      username = "nixos";
-    in
-    {
-      # A minimal (but updatable!) NixOS configuration output by this flake
-      nixosConfigurations.${name} = inputs.nixpkgs.lib.nixosSystem {
-        inherit system;
+      # Per-system outputs
+      perSystem =
+        { pkgs, ... }:
+        {
+          # Nix formatter (RFC 166)
+          formatter = pkgs.nixfmt-rfc-style;
 
-        # NixOS modules
-        modules = [
-          # Load the Determinate module, which provides Determinate Nix
-          inputs.determinate.nixosModules.default
-
-          # Load the NixOS-WSL module
-          inputs.nixos-wsl.nixosModules.default
-
-          # Load the nix-ld module for VSCode/VSCodium Remote-WSL
-          inputs.nix-ld.nixosModules.nix-ld
-
-          # Load home-manager NixOS module
-          inputs.home-manager.nixosModules.home-manager
-
-          # Import all modules from directory
-          ./modules
-
-          # Home-manager configuration
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.${username} = import ./modules/home.nix;
-            home-manager.extraSpecialArgs = {
-              inherit username;
-            };
-          }
-
-          # This module provides a minimum viable NixOS configuration
-          (
-            { config, lib, ... }:
-            {
-              # Note: bootloader is configured by NixOS-WSL module
-              system.stateVersion = "25.05";
-            }
-          )
-        ];
-
-        specialArgs = {
-          # Values to pass to modules
-          inherit username;
+          # Development shell
+          devShells.default = pkgs.mkShell {
+            packages = with pkgs; [
+              nixfmt-rfc-style
+              git
+            ];
+            shellHook = ''
+              echo "NixOS WSL development environment"
+            '';
+          };
         };
-      };
-
-      # Nix formatter
-
-      # This applies the formatter that follows RFC 166, which defines a standard format:
-      # https://github.com/NixOS/rfcs/pull/166
-
-      # To format all Nix files:
-      # git ls-files -z '*.nix' | xargs -0 -r nix fmt
-      # To check formatting:
-      # git ls-files -z '*.nix' | xargs -0 -r nix develop --command nixfmt --check
-      formatter.${system} = inputs.nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
-
-      # Development shell
-      devShells.${system}.default = inputs.nixpkgs.legacyPackages.${system}.mkShell {
-        packages = with inputs.nixpkgs.legacyPackages.${system}; [
-          nixfmt-rfc-style
-          git
-        ];
-        shellHook = ''
-          echo "NixOS WSL development environment"
-        '';
-      };
     };
 }
