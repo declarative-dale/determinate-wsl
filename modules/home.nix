@@ -9,6 +9,8 @@
   home.packages = with pkgs; [
     zsh
     eza
+    bat
+    microfetch
   ];
 
   # Allow home-manager to manage itself
