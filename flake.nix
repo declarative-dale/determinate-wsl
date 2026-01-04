@@ -16,6 +16,10 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-ld = {
+      url = "github:Mic92/nix-ld";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # Flake outputs
@@ -28,6 +32,9 @@
       # The flake output name of your system (`nixosConfigurations.${key}`). Change this
       # to make it less generic
       name = "nixos-wsl";
+
+      # Default username - change this to match your preferred username
+      username = "nixos";
     in
     {
       # A minimal (but updatable!) NixOS configuration output by this flake
@@ -42,6 +49,9 @@
           # Load the NixOS-WSL module
           inputs.nixos-wsl.nixosModules.default
 
+          # Load the nix-ld module for VSCode/VSCodium Remote-WSL
+          inputs.nix-ld.nixosModules.nix-ld
+
           # Load home-manager NixOS module
           inputs.home-manager.nixosModules.home-manager
 
@@ -52,7 +62,10 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.nixos = import ./modules/home.nix;
+            home-manager.users.${username} = import ./modules/home.nix;
+            home-manager.extraSpecialArgs = {
+              inherit username;
+            };
           }
 
           # This module provides a minimum viable NixOS configuration
@@ -67,6 +80,7 @@
 
         specialArgs = {
           # Values to pass to modules
+          inherit username;
         };
       };
 

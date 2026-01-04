@@ -9,6 +9,7 @@
   config,
   lib,
   pkgs,
+  username,
   ...
 }:
 
@@ -44,7 +45,11 @@
   ];
 
   wsl.enable = true;
-  wsl.defaultUser = "nixos";
+  wsl.defaultUser = username;
+
+  # Enable nix-ld for VSCode/VSCodium Remote-WSL
+  nix-ld-config.enable = true;
+  nix-ld-config.user = username;
 
   nixpkgs.config.allowUnfree = true;
 
@@ -57,8 +62,8 @@
   # Enable zsh system-wide (required for setting it as default shell)
   programs.zsh.enable = true;
 
-  # Set zsh as default shell for nixos user
-  users.users.nixos = {
+  # Set zsh as default shell for user
+  users.users.${username} = {
     isNormalUser = true;
     shell = pkgs.zsh;
     extraGroups = [ "wheel" ];
