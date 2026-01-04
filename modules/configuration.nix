@@ -1,7 +1,7 @@
 # System-wide NixOS configuration
 # For user-specific configuration, see home.nix
 
-{ pkgs, username, ... }:
+{ pkgs, username, agenix, ... }:
 
 {
   # WSL Configuration
@@ -46,24 +46,15 @@
 
     # Security
     openssl
-    pinentry-curses
-    gpg-tui
 
     # System info
     microfetch
-  ];
+  ] ++ [ agenix ];
 
   # Programs Configuration
   programs = {
     # VSCode/VSCodium Remote-WSL support
     nix-ld.dev.enable = true;
-
-    # GPG agent with SSH support
-    gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-      pinentryPackage = pkgs.pinentry-curses;
-    };
 
     # Zsh (required for user shell)
     zsh.enable = true;

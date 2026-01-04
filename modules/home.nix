@@ -1,4 +1,4 @@
-{ pkgs, username, ... }:
+{ pkgs, username, agenix, ... }:
 
 {
   home = {
@@ -10,7 +10,7 @@
     packages = with pkgs; [
       eza
       microfetch
-    ];
+    ] ++ [ agenix ];
   };
 
   programs = {

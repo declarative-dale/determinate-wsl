@@ -16,6 +16,7 @@
 
         specialArgs = {
           inherit username;
+          agenix = inputs.agenix.packages.x86_64-linux.default;
         };
 
         modules = [
@@ -24,6 +25,7 @@
           inputs.nixos-wsl.nixosModules.default
           inputs.nix-ld.nixosModules.nix-ld
           inputs.home-manager.nixosModules.home-manager
+          inputs.agenix.nixosModules.default
 
           # Local modules (auto-imports all .nix files from modules/)
           ../modules
