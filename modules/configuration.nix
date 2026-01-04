@@ -48,7 +48,7 @@
   wsl.defaultUser = username;
 
   # Enable nix-ld for VSCode/VSCodium Remote-WSL
-  programs.nix-ld.enable = true;
+  programs.nix-ld.dev.enable = true;
   nix-ld-config.enable = true;
   nix-ld-config.user = username;
 
