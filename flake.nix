@@ -80,5 +80,16 @@
       # To check formatting:
       # git ls-files -z '*.nix' | xargs -0 -r nix develop --command nixfmt --check
       formatter.${system} = inputs.nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
+
+      # Development shell
+      devShells.${system}.default = inputs.nixpkgs.legacyPackages.${system}.mkShell {
+        packages = with inputs.nixpkgs.legacyPackages.${system}; [
+          nixfmt-rfc-style
+          git
+        ];
+        shellHook = ''
+          echo "NixOS WSL development environment"
+        '';
+      };
     };
 }
