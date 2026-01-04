@@ -12,6 +12,10 @@
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # Flake outputs
@@ -38,9 +42,19 @@
           # Load the NixOS-WSL module
           inputs.nixos-wsl.nixosModules.default
 
-          # Load the hardware configuration from a separate file (a common convention for NixOS)
-          ./hardware-configuration.nix
-          ./configuration.nix
+          # Load home-manager NixOS module
+          inputs.home-manager.nixosModules.home-manager
+
+          # Import all modules from directory
+          ./modules
+
+          # Home-manager configuration
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.nixos = import ./modules/home.nix;
+          }
+
           # This module provides a minimum viable NixOS configuration
           (
             { config, lib, ... }:
