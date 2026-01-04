@@ -27,8 +27,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    programs.nix-ld.enable = true;
-
     # Create server-env-setup script for VSCode/VSCodium server using home-manager
     # The VSCode server doesn't pick up NixOS environment variables automatically
     # so we need to write them to a file that gets sourced
