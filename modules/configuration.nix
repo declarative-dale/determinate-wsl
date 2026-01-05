@@ -4,13 +4,11 @@
 { pkgs, vars, agenix, ... }:
 
 {
-  # Networking
-  networking.hostName = vars.hostname;
-
   # WSL Configuration
   wsl = {
     enable = true;
     defaultUser = vars.username;
+    wslConf.network.hostname = vars.hostname;
   };
 
   # Nixpkgs Configuration
