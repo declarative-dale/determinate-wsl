@@ -27,6 +27,7 @@
       claude-code
       git
       direnv
+      fh
 
       # Editors
       vim
