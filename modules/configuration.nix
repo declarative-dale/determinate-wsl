@@ -9,8 +9,8 @@
 }:
 
 {
-  # Import Nix development environment module
-  imports = [ ./nix-dev ];
+  # Import Nix development packages (system-level)
+  imports = [ ./nix-dev/packages.nix ];
 
   # WSL Configuration
   wsl = {

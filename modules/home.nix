@@ -6,8 +6,12 @@
 }:
 
 {
-  # Import Nix development environment module
-  imports = [ ./nix-dev ];
+  # Import Nix development modules (home-manager level)
+  imports = [
+    ./nix-dev/home.nix
+    ./nix-dev/micro-lsp.nix
+    ./nix-dev/shell-aliases.nix
+  ];
 
   home = {
     username = vars.username;
