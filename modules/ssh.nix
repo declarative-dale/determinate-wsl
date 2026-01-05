@@ -14,7 +14,14 @@
       # SSH client configuration
       programs.ssh = {
         enable = true;
-        matchBlocks."*".identityFile = "~/.ssh/id_ed25519";
+
+        # Default SSH settings for all hosts
+        matchBlocks."*" = {
+          identityFile = "~/.ssh/id_ed25519";
+          # Additional sensible defaults
+          serverAliveInterval = 60;
+          serverAliveCountMax = 3;
+        };
       };
 
       # Generate ed25519 SSH key on first activation (idempotent)
