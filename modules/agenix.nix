@@ -1,7 +1,7 @@
 # Agenix secrets management configuration
 # Reference: https://github.com/ryantm/agenix
 
-{ ... }:
+{ vars, ... }:
 
 {
   # Agenix configuration
@@ -11,7 +11,7 @@
   # Example secret configuration:
   # age.secrets.example-secret = {
   #   file = ../secrets/example.age;
-  #   owner = username;
+  #   owner = vars.username;
   #   group = "users";
   # };
 

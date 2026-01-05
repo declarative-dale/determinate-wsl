@@ -1,14 +1,14 @@
 # SSH configuration
 # Configures SSH agent and generates ed25519 key on first activation
 
-{ pkgs, username, ... }:
+{ pkgs, vars, ... }:
 
 {
   # System-level SSH agent
   programs.ssh.startAgent = true;
 
   # User-level SSH configuration via home-manager
-  home-manager.users.${username} =
+  home-manager.users.${vars.username} =
     { lib, ... }:
     {
       # SSH client configuration
@@ -29,7 +29,7 @@
         if [ ! -f ~/.ssh/id_ed25519 ]; then
           $DRY_RUN_CMD mkdir -p ~/.ssh
           $DRY_RUN_CMD chmod 700 ~/.ssh
-          $DRY_RUN_CMD ${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N "" -C "${username}@nixos"
+          $DRY_RUN_CMD ${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N "" -C "${vars.username}@${vars.hostname}"
           echo "Generated new SSH ed25519 key at ~/.ssh/id_ed25519"
         fi
       '';

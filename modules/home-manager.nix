@@ -1,15 +1,15 @@
 # Home-manager integration module
 # Configures home-manager for the system user
 
-{ username, agenix, ... }:
+{ vars, agenix, ... }:
 
 {
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    users.${username} = import ./home.nix;
+    users.${vars.username} = import ./home.nix;
     extraSpecialArgs = {
-      inherit username agenix;
+      inherit vars agenix;
     };
   };
 }

@@ -6,7 +6,7 @@
   config,
   lib,
   pkgs,
-  username,
+  vars,
   ...
 }:
 
@@ -34,7 +34,7 @@ in
 
     user = lib.mkOption {
       type = lib.types.str;
-      default = username;
+      default = vars.username;
       description = "User for which to set up VSCode server environment";
     };
   };

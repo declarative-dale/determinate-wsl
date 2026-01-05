@@ -1,13 +1,16 @@
 # System-wide NixOS configuration
 # For user-specific configuration, see home.nix
 
-{ pkgs, username, agenix, ... }:
+{ pkgs, vars, agenix, ... }:
 
 {
+  # Networking
+  networking.hostName = vars.hostname;
+
   # WSL Configuration
   wsl = {
     enable = true;
-    defaultUser = username;
+    defaultUser = vars.username;
   };
 
   # Nixpkgs Configuration
@@ -63,11 +66,11 @@
   # nix-ld configuration for VSCode/VSCodium
   nix-ld-config = {
     enable = true;
-    user = username;
+    user = vars.username;
   };
 
   # User Configuration
-  users.users.${username} = {
+  users.users.${vars.username} = {
     isNormalUser = true;
     shell = pkgs.zsh;
     extraGroups = [ "wheel" ];

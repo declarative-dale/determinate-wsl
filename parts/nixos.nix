@@ -7,7 +7,7 @@
     let
       # Configuration variables
       username = "nixos";
-      hostname = "nixos-wsl";
+      hostname = "dnix-wsl";
     in
     {
       # NixOS system configuration
@@ -15,7 +15,9 @@
         system = "x86_64-linux";
 
         specialArgs = {
-          inherit username;
+          vars = {
+            inherit username hostname;
+          };
           agenix = inputs.agenix.packages.x86_64-linux.default;
         };
 

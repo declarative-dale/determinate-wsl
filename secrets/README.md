@@ -30,9 +30,9 @@ Add the public keys from steps 2 and 3 to `secrets/secrets.nix`:
 
 ```nix
 let
-  nixos = "age1..."; # Your user key
-  nixos-wsl-system = "age1..."; # System host key
-  allKeys = [ nixos nixos-wsl-system ];
+  userKey = "age1..."; # Your user key
+  systemKey = "age1..."; # System host key
+  allKeys = [ userKey systemKey ];
 in
 {
   "example-secret.age".publicKeys = allKeys;
@@ -69,7 +69,7 @@ In `modules/agenix.nix` or any module:
 {
   age.secrets.example-secret = {
     file = ../secrets/example-secret.age;
-    owner = username;
+    owner = vars.username;
     group = "users";
     mode = "400";
   };
@@ -84,7 +84,7 @@ The decrypted secret will be available at `/run/agenix/example-secret`.
 ```nix
 age.secrets.github-ssh-key = {
   file = ../secrets/github-ssh-key.age;
-  owner = username;
+  owner = vars.username;
   mode = "400";
 };
 
@@ -96,7 +96,7 @@ programs.ssh.matchBlocks."github.com".identityFile = "/run/agenix/github-ssh-key
 ```nix
 age.secrets.api-token = {
   file = ../secrets/api-token.age;
-  owner = username;
+  owner = vars.username;
 };
 
 # Reference in environment
