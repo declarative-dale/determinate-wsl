@@ -27,7 +27,6 @@
       claude-code
       git
       direnv
-      fh
 
       # Editors
       vim
@@ -39,6 +38,7 @@
       nixd
       nixfmt
       nixfmt-tree
+      fh
 
       # CLI utilities
       tmux
@@ -48,7 +48,9 @@
       rsync
       restic
       tree
-      wslu # WSL utilities including wslclip for clipboard integration
+      
+      # WSL utilities
+      wslu
 
       # Archive tools
       unrar
