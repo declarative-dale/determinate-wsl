@@ -9,6 +9,9 @@
 }:
 
 {
+  # Import Nix development environment module
+  imports = [ ./nix-dev ];
+
   # WSL Configuration
   wsl = {
     enable = true;
@@ -33,12 +36,7 @@
       neovim
       micro
 
-      # Nix tools
-      nil
-      nixd
-      nixfmt
-      nixfmt-tree
-      fh
+      # Note: Nix development tools now provided by nix-dev module
 
       # CLI utilities
       tmux

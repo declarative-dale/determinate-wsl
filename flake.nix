@@ -57,10 +57,33 @@
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
               nixfmt-rfc-style
+              alejandra
               git
+              statix
+              deadnix
+              nil
+              manix
             ];
             shellHook = ''
-              echo "NixOS WSL development environment"
+              echo "🔧 NixOS WSL development environment"
+              echo ""
+              echo "Available Nix development tools:"
+              echo "  📝 Formatting:"
+              echo "    - nixfmt-rfc-style: Format Nix files (RFC 166 style)"
+              echo "    - alejandra: Alternative fast Nix formatter"
+              echo ""
+              echo "  🔍 Linting & Analysis:"
+              echo "    - statix check .: Lint Nix files for common issues"
+              echo "    - deadnix .: Find unused Nix code"
+              echo ""
+              echo "  🤖 LSP & Documentation:"
+              echo "    - nil: Nix LSP server (configure in your editor)"
+              echo "    - manix <query>: Search Nix documentation"
+              echo ""
+              echo "  🔨 Useful commands:"
+              echo "    - nix flake check: Check flake for errors"
+              echo "    - nix fmt: Format all Nix files in project"
+              echo ""
             '';
           };
         };

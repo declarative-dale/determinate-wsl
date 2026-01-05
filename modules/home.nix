@@ -6,6 +6,9 @@
 }:
 
 {
+  # Import Nix development environment module
+  imports = [ ./nix-dev ];
+
   home = {
     username = vars.username;
     homeDirectory = "/home/${vars.username}";
@@ -55,11 +58,7 @@
 
     bat.enable = true;
     bat.config.theme = "TwoDark";
-  };
 
-  # Micro editor with WSL clipboard integration
-  xdg.configFile."micro/settings.json".text = builtins.toJSON {
-    clipboard = "external";
-    clipboardcmd = "wslclip";
+    # Note: direnv, micro, and shell aliases now provided by nix-dev module
   };
 }
