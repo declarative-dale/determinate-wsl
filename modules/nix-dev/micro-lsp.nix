@@ -7,8 +7,8 @@ let
   microLspPlugin = pkgs.fetchFromGitHub {
     owner = "AndCake";
     repo = "micro-plugin-lsp";
-    rev = "v1.0.11";
-    sha256 = "sha256-RuXNSHaas/L6SjlGH1fUrbYPJd7yw+llEUwq85PPEqo=";
+    rev = "v0.6.3";
+    sha256 = "sha256-rZ9Vw9WPGNaJBGHKU40F6cBIYQ1JFtSKPDrheazKkPY=";
   };
 
   # LSP configuration for various file types
@@ -53,27 +53,34 @@ in
   xdg.configFile."micro/plug/lsp" = {
     source = microLspPlugin;
     recursive = true;
+    force = true; # Overwrite existing plugin
   };
 
   # Configure LSP servers
-  xdg.configFile."micro/lsp-config.json".text = builtins.toJSON lspConfig;
+  xdg.configFile."micro/lsp-config.json" = {
+    text = builtins.toJSON lspConfig;
+    force = true; # Overwrite existing config
+  };
 
   # Update micro settings to enable LSP features
   programs.micro.settings = microSettings;
 
   # Add keybindings for LSP features
-  xdg.configFile."micro/bindings.json".text = builtins.toJSON {
-    # Comment toggling
-    "Alt-/" = "lua:comment.comment";
-    "CtrlUnderscore" = "lua:comment.comment";
+  xdg.configFile."micro/bindings.json" = {
+    text = builtins.toJSON {
+      # Comment toggling
+      "Alt-/" = "lua:comment.comment";
+      "CtrlUnderscore" = "lua:comment.comment";
 
-    # LSP keybindings
-    "Alt-k" = "command:lsp-hover";           # Show hover information
-    "Alt-d" = "command:lsp-definition";      # Go to definition
-    "Alt-r" = "command:lsp-references";      # Find references
-    "Alt-f" = "command:lsp-format";          # Format document
-    "Alt-a" = "command:lsp-code-action";     # Code actions
-    "Alt-n" = "command:lsp-next-diagnostic"; # Next diagnostic
-    "Alt-p" = "command:lsp-prev-diagnostic"; # Previous diagnostic
+      # LSP keybindings
+      "Alt-k" = "command:lsp-hover";           # Show hover information
+      "Alt-d" = "command:lsp-definition";      # Go to definition
+      "Alt-r" = "command:lsp-references";      # Find references
+      "Alt-f" = "command:lsp-format";          # Format document
+      "Alt-a" = "command:lsp-code-action";     # Code actions
+      "Alt-n" = "command:lsp-next-diagnostic"; # Next diagnostic
+      "Alt-p" = "command:lsp-prev-diagnostic"; # Previous diagnostic
+    };
+    force = true; # Overwrite existing file
   };
 }

@@ -14,13 +14,17 @@
       # SSH client configuration
       programs.ssh = {
         enable = true;
+        enableDefaultConfig = false; # Explicitly disable default config (future-proofing)
 
         # Default SSH settings for all hosts
         matchBlocks."*" = {
           identityFile = "~/.ssh/id_ed25519";
-          # Additional sensible defaults
+          # Sensible defaults
           serverAliveInterval = 60;
           serverAliveCountMax = 3;
+          # Additional standard defaults (previously auto-included)
+          compression = false;
+          hashKnownHosts = false;
         };
       };
 
