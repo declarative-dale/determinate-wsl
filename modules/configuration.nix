@@ -1,7 +1,12 @@
 # System-wide NixOS configuration
 # For user-specific configuration, see home.nix
 
-{ pkgs, vars, agenix, ... }:
+{
+  pkgs,
+  vars,
+  agenix,
+  ...
+}:
 
 {
   # WSL Configuration
@@ -15,42 +20,46 @@
   nixpkgs.config.allowUnfree = true;
 
   # System Packages
-  environment.systemPackages = with pkgs; [
-    # Development tools
-    claude-code
-    git
-    direnv
+  environment.systemPackages =
+    with pkgs;
+    [
+      # Development tools
+      claude-code
+      git
+      direnv
 
-    # Editors
-    vim
-    neovim
-    micro
+      # Editors
+      vim
+      neovim
+      micro
 
-    # Nix tools
-    nil
-    nixd
-    nixfmt
+      # Nix tools
+      nil
+      nixd
+      nixfmt
+      nixfmt-tree
 
-    # CLI utilities
-    tmux
-    bottom
-    curl
-    wget
-    rsync
-    restic
-    tree
-    wslu # WSL utilities including wslclip for clipboard integration
+      # CLI utilities
+      tmux
+      bottom
+      curl
+      wget
+      rsync
+      restic
+      tree
+      wslu # WSL utilities including wslclip for clipboard integration
 
-    # Archive tools
-    unrar
-    p7zip
+      # Archive tools
+      unrar
+      p7zip
 
-    # Security
-    openssl
+      # Security
+      openssl
 
-    # System info
-    microfetch
-  ] ++ [ agenix ];
+      # System info
+      microfetch
+    ]
+    ++ [ agenix ];
 
   # Programs Configuration
   programs = {

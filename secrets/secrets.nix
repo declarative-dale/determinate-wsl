@@ -13,7 +13,10 @@ let
   systemKey = ""; # Add system's age public key here
 
   # Combined list of authorized keys
-  allKeys = [ userKey systemKey ];
+  allKeys = [
+    userKey
+    systemKey
+  ];
 in
 {
   # Example secret configuration

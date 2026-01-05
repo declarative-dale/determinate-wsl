@@ -1,4 +1,9 @@
-{ pkgs, vars, agenix, ... }:
+{
+  pkgs,
+  vars,
+  agenix,
+  ...
+}:
 
 {
   home = {
@@ -7,10 +12,13 @@
     stateVersion = "25.05";
 
     # User packages
-    packages = with pkgs; [
-      eza
-      microfetch
-    ] ++ [ agenix ];
+    packages =
+      with pkgs;
+      [
+        eza
+        microfetch
+      ]
+      ++ [ agenix ];
   };
 
   programs = {
@@ -55,4 +63,3 @@
     clipboardcmd = "wslclip";
   };
 }
-
